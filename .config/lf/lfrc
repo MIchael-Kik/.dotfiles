@@ -10,12 +10,12 @@ cmd createSymbolicLink ${{
 
     printf "Creating Symlink ...\n"
     ln -sf "$f" $symlinkpath
-
 }}
 
 cmd open ${{
     case $(echo "$f" | cut -d'.' -f2) in
         .ott | .docx ) $xdg-open "$f";;
+        .jpg | .png  ) $BROWSER "$f";;
         .pdf) $BROWSER "$f" ;;
         *|.*) $EDITOR "$f" ;;
     esac
@@ -60,7 +60,7 @@ cmd viewimage ${{
 }}
 
 cmd fzf_jump ${{
-    res="$(find . -maxdepth 5 | fzf --reverse --header='Jump to location')"
+    res="$(find . -maxdepth 4 | fzf --reverse --header='Jump to location')"
     if [ -f "$res" ]; then
       cmd="select"
     elif [ -d "$res" ]; then
@@ -81,9 +81,9 @@ cmd unarchive ${{
   esac
 }}
 
-cmd czip %zip -r "$f" "$f"
+cmd czip %zip -r "$f.zip" "$f"
 cmd ctar %tar cvf "$f.tar" "$f"
-cmd ctargz %tar cvzf "$f.tat.gz" "$f"
+cmd ctargz %tar cvzf "$f.tar.gz" "$f"
 cmd ctarbz2 %tar cjvf "$f.tar.bz2" "$f"
 
 #Encrypting
@@ -102,16 +102,14 @@ map e
 map f
 
 #file openers
-map ee $$EDITOR "$f"
-map es $sudo $EDITOR "$f"
-map z $view "$f"
 map o openWith
+
 #Fuzzy search
 map f : fzf_jump
 
 #Archive Mappings
 map az czip
-map at ctat
+map at ctar
 map ag ctargz
 map ab ctarbz2
 map au unarchive
@@ -123,17 +121,30 @@ map x cut
 map y copy
 map <enter> $$EDITOR "$f" 
 map mf mkfile
-map msf sudomkfile
-map msl createSymbolicLink
+map ml createSymbolicLink
 map md mkdirs
 map ch chmod
 map r rename
 map R reload
+map U unselect
+map C clear
+map H top
+map L bottom
+map vi viewimage
+
+# Encrypytion
 map ec encrypt
 map ed decrypt
-map iv viewimage
 
 map . set hidden!
+
+# Movements
+map gh cd ~
+map gd cd ~/Downloads
+map gD cd ~/Documents
+map gp cd ~/Pictures
+map gc cd ~/.config
+
 
 set previewer lf-previewer
 set cleaner lf-cleaner

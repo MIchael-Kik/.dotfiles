@@ -17,5 +17,8 @@
     "C_Cpp.clang_format_sortIncludes": true,
     "extensions.ignoreRecommendations": true,
     "latex-workshop.latex.autoBuild.run": "never",
-    "html.format.wrapLineLength": 150
+    "html.format.wrapLineLength": 150,
+    "editor.wordWrap": "bounded",
+    "editor.wrappingIndent": "indent",
+    "editor.wordWrapColumn": 105
 }
