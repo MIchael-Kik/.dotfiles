@@ -1,13 +1,9 @@
 "Plugins
 call plug#begin()
-
 Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/ycm-core/YouCompleteMe.git'
 Plug 'https://github.com/sheerun/vim-polyglot.git'
 Plug 'https://github.com/ayu-theme/ayu-vim.git'
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-Plug 'https://github.com/preservim/nerdtree.git'
-
 call plug#end()
 
 "basic settings
@@ -39,6 +35,7 @@ nmap <F2> :NERDTreeToggle<CR>
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_auto_trigger = 1
 let g:ycm_max_num_candidates = 6
+let g:ycm_enable_semantic_highlighting=1
 
 " enables backspace to work as expected
 set backspace =indent,eol,start

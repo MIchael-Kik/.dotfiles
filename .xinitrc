@@ -34,7 +34,6 @@ fi
 
 #### SYSTEM REQUIREMENTS CONFIGS ###
 # Setting resolutions
-xrandr --setprovideroutputsource modesetting NVIDIA-0 
 xrandr --auto
 
 # Compositor
@@ -43,19 +42,18 @@ picom -f &
 
 ### Customizations for DWM ###
 # For dwm info bar
-~/WindowManagerConfig/dwm-bar/dwm_bar.sh &
+dwm_bar.sh &
 
 # Background random slideshow for User michaelkik
-oxygen /Pictures 300 2 &
+oxygen --imagedir=/Pictures --timeout=300 --monitors=2 &
 
 # Keyring daemon for minecraft launcher
 gnome-keyring-daemon -r -d &
 ### END ###
 
-# Setting mouse speed
-xinput --set-prop 14 'libinput Accel Speed' -0.9
-xinput --set-prop 13 'libinput Accel Speed' -0.9
-xinput --set-prop 12 'libinput Accel Speed' -0.9
+# FCITX for japanes input methods
+fcitx -d &
+
 
 # Execute DWM
 exec dwm 

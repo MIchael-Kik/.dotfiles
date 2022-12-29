@@ -2,29 +2,53 @@
 set ignorecase true
 set drawbox true
 
+
 #Custom Functions
 
-cmd createSymbolicLink ${{
-    printf "Enter Symlink dest.: "
-    read symlinkpath
-
-    printf "Creating Symlink ...\n"
-    ln -sf "$f" $symlinkpath
+cmd follow_link %{{
+    lf -remote "send ${id} select '$(readlink $f)'"
 }}
+
+cmd paste-async &{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    case "$mode" in
+        copy) cp -rn -- "$@" .;;
+        move) mv -n -- "$@" .;;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
+
+# y (select for copy) and P to paste soft-link
+# d (select for cut) and P to paste hard-link
+cmd link %{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    if [ "$#" -lt 1 ]; then
+        lf -remote "send $id echo no files to link"
+        exit 0
+    fi
+    case "$mode" in
+        # symbolically copy mode is indicating a soft link
+        copy) ln -sr -t . -- "$@";;
+        # while a move mode is indicating a hard link
+        move) ln -t . -- "$@";;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
+
 
 cmd open ${{
     case $(echo "$f" | cut -d'.' -f2) in
-        .ott | .docx ) $xdg-open "$f";;
-        .jpg | .png  ) $BROWSER "$f";;
-        .pdf) $BROWSER "$f" ;;
+        ott | docx ) xdg-open "$f";;
+        jpg | png  ) $BROWSER "$f";;
+        pdf) $BROWSER "$f" ;;
         *|.*) $EDITOR "$f" ;;
     esac
-}}
-
-cmd openWith ${{
-    printf "Open With: "
-    read ans
-    $ans "$f"
 }}
 
 cmd mkdirs ${{
@@ -101,9 +125,6 @@ map d
 map e
 map f
 
-#file openers
-map o openWith
-
 #Fuzzy search
 map f : fzf_jump
 
@@ -117,13 +138,14 @@ map au unarchive
 # Other bindings
 map DD delete
 map p paste
+map P paste-async
 map x cut
 map y copy
-map <enter> $$EDITOR "$f" 
+map <enter> open
 map mf mkfile
-map ml createSymbolicLink
 map md mkdirs
-map ch chmod
+map s link
+map mp chmod
 map r rename
 map R reload
 map U unselect
@@ -145,6 +167,7 @@ map gD cd ~/Documents
 map gp cd ~/Pictures
 map gc cd ~/.config
 
+map gL follow_link
 
 set previewer lf-previewer
 set cleaner lf-cleaner
