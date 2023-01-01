@@ -4,6 +4,7 @@ Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/ycm-core/YouCompleteMe.git'
 Plug 'https://github.com/sheerun/vim-polyglot.git'
 Plug 'https://github.com/ayu-theme/ayu-vim.git'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 "basic settings
